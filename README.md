@@ -12,7 +12,7 @@ This project demonstrates an agentic workflow where an AI "worker" interacts wit
 - **Conditional Logic**: Handles state-dependent tasks (e.g., reactivate account -> reset password).
 - **SaaS Integration**: Compatible with real-world platforms like Notion.
 
-## 🛠️ Technical Stack
+## Technical Stack
 - **Backend**: FastAPI, Jinja2 (Templates), Uvicorn.
 - **AI/Automation**: Browser-Use, Playwright, Google Gemini API.
 - **Styling**: Vanilla CSS with a focus on rich, premium aesthetics.
