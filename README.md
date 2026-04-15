@@ -2,7 +2,7 @@
 
 An AI-powered IT Support Agent that handles enterprise workflows (user provisioning, password resets) using natural language and browser-based automation.
 
-## 🚀 Overview
+## Overview
 This project demonstrates an agentic workflow where an AI "worker" interacts with an IT Admin Panel exactly like a human would. Using **Vision-to-Action** logic, it interprets UI elements, follows conditional instructions, and reports results back to the team.
 
 ### Features
@@ -17,7 +17,7 @@ This project demonstrates an agentic workflow where an AI "worker" interacts wit
 - **AI/Automation**: Browser-Use, Playwright, Google Gemini API.
 - **Styling**: Vanilla CSS with a focus on rich, premium aesthetics.
 
-## 📦 Setup & Installation
+## Setup & Installation
 
 1. **Clone the repository**:
    ```bash
@@ -49,13 +49,13 @@ This project demonstrates an agentic workflow where an AI "worker" interacts wit
    python agent/agent.py
    ```
 
-## 🤖 Demo Scenarios
+## Demo Scenarios
 - **Scenario 1**: Create a new user account with a specific password.
 - **Scenario 2**: Reset a forgotten password and report the new one.
 - **Scenario 3**: Multi-step activation of an inactive user before performing a reset.
 - **Scenario 4**: SaaS login readiness check for Notion.
 
-## 🧠 Key Design Decisions
+## Key Design Decisions
 - **Multimodal Vision**: Used Gemini's vision capabilities to handle UI feedback without fragile CSS selectors.
 - **Self-Correction**: Implemented robust retry logic to handle model 503 errors and peak demand.
 - **Human-in-the-Loop**: The Chat Simulator allows seamless interaction between human managers and AI workers.
