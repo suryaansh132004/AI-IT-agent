@@ -7,7 +7,7 @@ This project demonstrates an agentic workflow where an AI "worker" interacts wit
 
 ### Features
 - **Mock IT Admin Panel**: Developed with **FastAPI** to simulate a realistic enterprise dashboard.
-- **Autonomous Agent**: Built with **Browser-Use** and **Gemini 2.5 Flash Lite**.
+- **Autonomous Agent**: Built with **Browser-Use** and **Gemini models**.
 - **Slack-style Chat Simulator**: A web interface for triggering agent tasks via natural language.
 - **Conditional Logic**: Handles state-dependent tasks (e.g., reactivate account -> reset password).
 - **SaaS Integration**: Compatible with real-world platforms like Notion.
@@ -35,7 +35,7 @@ This project demonstrates an agentic workflow where an AI "worker" interacts wit
    Create a `.env` file in the root directory:
    ```env
    GOOGLE_API_KEY=your_gemini_api_key_here
-   GEMINI_MODEL=gemini-2.5-flash-lite
+   GEMINI_MODEL=model_of_preference
    ```
 
 4. **Run the Dashboard**:
