@@ -21,8 +21,7 @@ This project demonstrates an agentic workflow where an AI "worker" interacts wit
 
 1. **Clone the repository**:
    ```bash
-   git clone <your-repo-link>
-   cd decawork
+   git clone https://github.com/suryaansh132004/AI-IT-agent.git
    ```
 
 2. **Install dependencies**:
