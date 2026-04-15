@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb-bar">
+    <a href="/">Directory</a>
+    <span class="breadcrumb-sep">›</span>
+    <a href="/">Users</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>New User</span>
+</div>
+
+<div class="page-body" style="max-width: 720px;">
+
+    <div style="margin-bottom: 20px;">
+        <h1 style="font-size: 20px; font-weight: 700; color: var(--gray-900);">Create New User Account</h1>
+        <p style="font-size: 13.5px; color: var(--gray-500); margin-top: 4px;">Provision a new identity in the corporate directory. Fields marked <span style="color:var(--red-600);">*</span> are required.</p>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="card-header-left">
+                <h2>Identity & Access</h2>
+                <p>Basic identity information and account configuration</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <form action="/create" method="POST" id="create-user-form">
+                <div class="form-grid" style="gap: 20px;">
+
+                    <div class="form-grid form-row-2">
+                        <div class="form-group">
+                            <label for="first_name">First Name <span class="req">*</span></label>
+                            <input type="text" id="first_name" name="first_name" class="form-control" placeholder="e.g. Alice" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="last_name">Last Name <span class="req">*</span></label>
+                            <input type="text" id="last_name" name="last_name" class="form-control" placeholder="e.g. Johnson">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Work Email Address <span class="req">*</span></label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="e.g. alice.johnson@company.com" required>
+                        <div class="form-hint">Primary email used for authentication and communication</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Initial Password</label>
+                        <input type="text" id="password" name="password" class="form-control" placeholder="Leave blank to auto-generate">
+                        <div class="form-hint">Must be at least 8 characters with numbers and symbols</div>
+                    </div>
+
+                    <div class="form-grid form-row-2">
+                        <div class="form-group">
+                            <label for="department">Department</label>
+                            <select id="department" name="department" class="form-control">
+                                <option value="">Select department…</option>
+                                <option>Engineering</option>
+                                <option>Marketing</option>
+                                <option>Human Resources</option>
+                                <option>Finance</option>
+                                <option>IT Support</option>
+                                <option>Operations</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="role">System Role</label>
+                            <select id="role" name="role" class="form-control">
+                                <option value="staff" selected>Staff (Read-Only)</option>
+                                <option value="analyst">Analyst</option>
+                                <option value="manager">Manager</option>
+                                <option value="admin">Administrator</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="background: var(--blue-50); border: 1px solid #bfdbfe; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #1e40af;">
+                        ℹ️ A welcome email with a temporary password will be dispatched to the user's work email upon account creation.
+                    </div>
+
+                    <div style="display: flex; gap: 10px; padding-top: 4px; border-top: 1px solid var(--gray-100);">
+                        <button type="submit" id="submit-btn" class="btn btn-primary">Create Account</button>
+                        <a href="/" class="btn btn-outline">Cancel</a>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Auto-build name field from first + last
+    const form = document.getElementById('create-user-form');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const first = document.getElementById('first_name').value.trim();
+        const last  = document.getElementById('last_name').value.trim();
+        const name  = (first + ' ' + last).trim() || first;
+
+        // Create hidden name field and submit
+        const hidden = document.createElement('input');
+        hidden.type = 'hidden';
+        hidden.name = 'name';
+        hidden.value = name;
+        form.appendChild(hidden);
+        form.submit();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,139 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb-bar">
+    <a href="/">Directory</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>Users</span>
+</div>
+
+<div class="page-body">
+
+    <!-- STATS ROW -->
+    <div class="stats-row">
+        <div class="stat-card stat-card-accent">
+            <div class="stat-card-label">Total Users</div>
+            <div class="stat-card-value">{{ users | length }}</div>
+            <div class="stat-card-sub">Across all departments</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-label">Active</div>
+            <div class="stat-card-value" style="color: var(--green-600);">{{ users | selectattr('status', 'equalto', 'active') | list | length }}</div>
+            <div class="stat-card-sub">Accounts in good standing</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-label">Deactivated</div>
+            <div class="stat-card-value" style="color: var(--red-600);">{{ users | selectattr('status', 'equalto', 'inactive') | list | length }}</div>
+            <div class="stat-card-sub">Suspended access</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-label">Pending Tickets</div>
+            <div class="stat-card-value" style="color: var(--orange-500);">3</div>
+            <div class="stat-card-sub">Awaiting resolution</div>
+        </div>
+    </div>
+
+    <!-- USERS TABLE CARD -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-header-left">
+                <h2>User Directory</h2>
+                <p>Manage identities, roles, and access permissions</p>
+            </div>
+            <a href="/create" class="btn btn-primary" id="add-user-btn">+ Add User</a>
+        </div>
+
+        <!-- TOOLBAR -->
+        <div class="toolbar">
+            <div class="toolbar-search">
+                <input type="text" id="user-search" placeholder="Search by name or email…">
+            </div>
+            <div class="filter-tabs">
+                <button class="filter-tab active" onclick="filterTable(this, 'all')">All</button>
+                <button class="filter-tab" onclick="filterTable(this, 'active')">Active</button>
+                <button class="filter-tab" onclick="filterTable(this, 'inactive')">Deactivated</button>
+            </div>
+            <div class="toolbar-spacer"></div>
+            <button class="btn btn-outline btn-sm">⬇ Export</button>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Department</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Last Login</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="user-table-body">
+                    {% set colors = ['#1d4ed8','#7c3aed','#0f766e','#b45309','#be185d'] %}
+                    {% for user in users %}
+                    {% set initials = (user.name.split()[0][0] + user.name.split()[-1][0]) | upper %}
+                    {% set color = colors[loop.index0 % colors|length] %}
+                    <tr data-status="{{ user.status }}">
+                        <td>
+                            <div class="user-cell">
+                                <div class="user-avatar" style="background: {{ color }};">{{ initials }}</div>
+                                <div>
+                                    <div class="user-name">{{ user.name }}</div>
+                                    <div class="user-email">{{ user.email }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span style="color: var(--gray-600);">{{ ['Engineering','Marketing','HR','Finance','Support'][loop.index0 % 5] }}</span></td>
+                        <td><span class="role-tag">{{ ['Staff','Manager','Admin','Analyst','Support'][loop.index0 % 5] }}</span></td>
+                        <td>
+                            <span class="badge {% if user.status == 'active' %}badge-active{% else %}badge-inactive{% endif %}">
+                                <span class="badge-dot"></span>
+                                {{ user.status | capitalize }}
+                            </span>
+                        </td>
+                        <td style="color: var(--gray-500); font-size: 12.5px;">2 hrs ago</td>
+                        <td>
+                            <a href="/user/{{ user.id }}" class="btn btn-outline btn-sm" id="manage-{{ user.id }}">Manage →</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="pagination">
+            <span>Showing {{ users | length }} of {{ users | length }} users</span>
+            <div class="pagination-btns">
+                <button class="pagination-btn">‹ Prev</button>
+                <button class="pagination-btn active">1</button>
+                <button class="pagination-btn">Next ›</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Live search
+    document.getElementById('user-search').addEventListener('input', function () {
+        const q = this.value.toLowerCase();
+        document.querySelectorAll('#user-table-body tr').forEach(row => {
+            row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+        });
+    });
+
+    // Status filter
+    function filterTable(btn, status) {
+        document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('#user-table-body tr').forEach(row => {
+            if (status === 'all' || row.dataset.status === status) row.style.display = '';
+            else row.style.display = 'none';
+        });
+    }
+</script>
+{% endblock %}

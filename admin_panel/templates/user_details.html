@@ -1,0 +1,188 @@
+{% extends "layout.html" %}
+{% block content %}
+
+{% set initials = (user.name.split()[0][0] + user.name.split()[-1][0]) | upper %}
+{% set av_color = '#1d4ed8' %}
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb-bar">
+    <a href="/">Directory</a>
+    <span class="breadcrumb-sep">›</span>
+    <a href="/">Users</a>
+    <span class="breadcrumb-sep">›</span>
+    <span>{{ user.name }}</span>
+</div>
+
+<div class="page-body">
+<div style="display: grid; grid-template-columns: 1fr 360px; gap: 20px; align-items: start;">
+
+    <!-- LEFT COLUMN -->
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+
+        <!-- PROFILE CARD -->
+        <div class="card">
+            <div class="profile-header">
+                <div class="profile-avatar" style="background: {{ av_color }};">{{ initials }}</div>
+                <div>
+                    <div class="profile-name">{{ user.name }}</div>
+                    <div class="profile-email">{{ user.email }}</div>
+                    <div class="profile-meta">
+                        <span class="badge {% if user.status == 'active' %}badge-active{% else %}badge-inactive{% endif %}">
+                            <span class="badge-dot"></span>{{ user.status | capitalize }}
+                        </span>
+                        <span class="role-tag">Staff</span>
+                        <span style="font-size: 12px; color: var(--gray-400);">ID: {{ user.id[:8] }}…</span>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-detail-grid">
+                <div class="profile-detail-item">
+                    <div class="detail-label">Department</div>
+                    <div class="detail-value">Engineering</div>
+                </div>
+                <div class="profile-detail-item">
+                    <div class="detail-label">Location</div>
+                    <div class="detail-value">HQ – Floor 3</div>
+                </div>
+                <div class="profile-detail-item">
+                    <div class="detail-label">Account Created</div>
+                    <div class="detail-value">Apr 10, 2025</div>
+                </div>
+                <div class="profile-detail-item">
+                    <div class="detail-label">Last Login</div>
+                    <div class="detail-value">2 hours ago</div>
+                </div>
+                <div class="profile-detail-item">
+                    <div class="detail-label">MFA Status</div>
+                    <div class="detail-value" style="color: var(--green-600);">✓ Enabled</div>
+                </div>
+                <div class="profile-detail-item">
+                    <div class="detail-label">Password Age</div>
+                    <div class="detail-value" style="color: var(--orange-500);">87 days</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RECENT ACTIVITY -->
+        <div class="card">
+            <div class="card-header">
+                <div class="card-header-left">
+                    <h2>Recent Activity</h2>
+                    <p>Audit log for this account</p>
+                </div>
+                <a href="#" class="btn btn-ghost btn-sm">View Full Log</a>
+            </div>
+            <div class="card-body">
+                <div class="log-item">
+                    <div class="log-dot" style="background: var(--green-600);"></div>
+                    <div>
+                        <div class="log-text">Successful login from 192.168.1.42 (Chrome / Windows)</div>
+                        <div class="log-time">2 hours ago</div>
+                    </div>
+                </div>
+                <div class="log-item">
+                    <div class="log-dot"></div>
+                    <div>
+                        <div class="log-text">Password changed by user via self-service portal</div>
+                        <div class="log-time">87 days ago</div>
+                    </div>
+                </div>
+                <div class="log-item">
+                    <div class="log-dot"></div>
+                    <div>
+                        <div class="log-text">MFA device enrolled (Authenticator App)</div>
+                        <div class="log-time">6 months ago</div>
+                    </div>
+                </div>
+                <div class="log-item">
+                    <div class="log-dot"></div>
+                    <div>
+                        <div class="log-text">Account provisioned by admin@company.com</div>
+                        <div class="log-time">Apr 10, 2025</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RIGHT COLUMN — ACTIONS -->
+    <div style="display: flex; flex-direction: column; gap: 20px;">
+
+        <!-- ACCOUNT ACTIONS -->
+        <div>
+            <h3 style="font-size: 13px; font-weight: 600; color: var(--gray-500); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px;">Account Actions</h3>
+            <div class="actions-panel">
+
+                <div class="action-item">
+                    <div class="action-info">
+                        <h4>Reset Password</h4>
+                        <p>Send a password reset link to this user's email</p>
+                    </div>
+                    {% if user.status == 'active' %}
+                    <form action="/user/{{ user.id }}/reset-password" method="POST">
+                        <button type="submit" id="reset-password-btn" class="btn btn-outline btn-sm">Reset →</button>
+                    </form>
+                    {% else %}
+                    <button class="btn btn-outline btn-sm" disabled style="opacity: 0.5; cursor: not-allowed;">Account Inactive</button>
+                    {% endif %}
+                </div>
+
+                <div class="action-item">
+                    <div class="action-info">
+                        <h4>Revoke Active Sessions</h4>
+                        <p>Force sign-out from all active devices</p>
+                    </div>
+                    <button class="btn btn-outline btn-sm" onclick="alert('Sessions revoked (demo)')" {% if user.status != 'active' %}disabled style="opacity: 0.5; cursor: not-allowed;"{% endif %}>Revoke</button>
+                </div>
+
+                <div class="action-item">
+                    <div class="action-info">
+                        <h4>Manage Group Memberships</h4>
+                        <p>Add or remove from directory groups</p>
+                    </div>
+                    <a href="#" class="btn btn-outline btn-sm">Edit →</a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- DANGER ZONE -->
+        <div>
+            <h3 style="font-size: 13px; font-weight: 600; color: {% if user.status == 'active' %}var(--red-600){% else %}var(--green-600){% endif %}; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px;">
+                {% if user.status == 'active' %}Danger Zone{% else %}Recovery Zone{% endif %}
+            </h3>
+            <div class="actions-panel">
+                {% if user.status == 'active' %}
+                <div class="action-item action-danger">
+                    <div class="action-info">
+                        <h4>Deactivate Account</h4>
+                        <p>Immediately suspend access to all systems</p>
+                    </div>
+                    <form action="/user/{{ user.id }}/deactivate" method="POST"
+                          onsubmit="return confirm('Deactivate {{ user.name }}? They will immediately lose access to all systems.')">
+                        <button type="submit" id="deactivate-btn" class="btn btn-danger btn-sm">Deactivate</button>
+                    </form>
+                </div>
+                {% else %}
+                <div class="action-item">
+                    <div class="action-info">
+                        <h4 style="color: var(--green-600);">Activate Account</h4>
+                        <p>Restore system access for this identity</p>
+                    </div>
+                    <form action="/user/{{ user.id }}/activate" method="POST">
+                        <button type="submit" id="activate-btn" class="btn btn-primary btn-sm" style="background: var(--green-600);">Activate →</button>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- BACK BUTTON -->
+        <a href="/" class="btn btn-outline" style="justify-content: center;">← Back to Directory</a>
+
+    </div>
+
+</div>
+</div>
+{% endblock %}
